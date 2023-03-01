@@ -301,6 +301,14 @@ class FlxSound extends FlxBasic
 		}
 
 		_volumeAdjust = radialMultiplier;
+		#if (FLX_PITCH && FUNKIN_RHYTHM)
+		@:privateAccess
+		if (FlxG.timeScale != 1 && _channel.__source != null && _channel.__source.pitch != pitch * FlxG.timeScale)
+		{
+			pitch  *= FlxG.timeScale;
+			_pitch /= FlxG.timeScale;
+		}
+		#end
 		updateTransform();
 
 		if (_transform.volume > 0)
@@ -429,7 +437,7 @@ class FlxSound extends FlxBasic
 		exists = true;
 		onComplete = OnComplete;
 		#if FLX_PITCH
-		pitch = 1;
+		pitch = #if FUNKIN_RHYTHM FlxG.timeScale; _pitch = 1;#else 1;#end
 		#end
 		_length = (_sound == null) ? 0 : _sound.length;
 		endTime = _length;
@@ -740,7 +748,7 @@ class FlxSound extends FlxBasic
 	{
 		return _pitch;
 	}
-	
+
 
 	function set_pitch(v:Float):Float
 	{
