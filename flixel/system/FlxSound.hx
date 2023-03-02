@@ -1,7 +1,7 @@
 package flixel.system;
 
-import flash.events.IEventDispatcher;
 import flash.events.Event;
+import flash.events.IEventDispatcher;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
@@ -303,7 +303,7 @@ class FlxSound extends FlxBasic
 		_volumeAdjust = radialMultiplier;
 		#if (FLX_PITCH && FUNKIN_RHYTHM)
 		@:privateAccess
-		if (FlxG.timeScale != 1 && _channel.__source != null && _channel.__source.pitch != pitch * FlxG.timeScale)
+		if (_channel.__source != null && _channel.__source.pitch != pitch * FlxG.timeScale)
 		{
 			pitch  *= FlxG.timeScale;
 			_pitch /= FlxG.timeScale;
