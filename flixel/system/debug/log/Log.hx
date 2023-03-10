@@ -4,6 +4,7 @@ package flixel.system.debug.log;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flixel.system.debug.FlxDebugger.GraphicLog;
+import funkin.system.util.TerminalColors.*;
 
 /**
  * A simple trace output window for use in the debugger overlay.
@@ -76,12 +77,34 @@ class Log extends Window
 		}
 
 		var text:String = Style.prefix + texts.join(" ");
+		#if FUNKIN_RHYTHM
+		var traceText = "";
+		if (Style.bold)
+			traceText += T_BOLD;
+		if (Style.italic)
+			traceText += T_ITALIC;
+		if (Style.underlined)
+			traceText += T_UNDERLINED;
+		traceText = (switch (Style.prefix)
+		{
+			case "[WARNING] ":
+				tWARNING;
+			case "[ERROR] ":
+				tERROR;
+			case "[NOTICE] ":
+				tNOTICE;
+			default:
+				tINFO;
+		})(text);
+		trace(traceText, "NAME: [FLIXEL]");
+		#end
 
 		// Apply text formatting
 		#if (!js && !lime_console)
 		text = flixel.util.FlxStringUtil.htmlFormat(text, Style.size, Style.color, Style.bold, Style.italic, Style.underlined);
 		#end
 
+		#if !FUNKIN_RHYTHM
 		// Check if the text has been added yet already
 		if (FireOnce)
 		{
@@ -93,6 +116,7 @@ class Log extends Window
 				}
 			}
 		}
+		#end
 
 		// Actually add it to the textfield
 		if (_lines.length <= 0)
